@@ -53,15 +53,15 @@ void run_test_case_dijkstra(std::istream &test_case, std::ostream &log) {
     
 }
 
-void run_test_instance_fft(std::ostream &log, std::vector<int> freqs, int n_samples) {
-  size_t n_signals = freqs.size();
+void run_test_instance_fft(std::ostream &log, std::vector<SignalDesc> &sds, int n_samples) {
+  size_t n_signals = sds.size();
 
   std::vector<std::vector<double>> signals;
   double signal[n_samples];
 
   for (size_t i = 0; i < n_signals; ++i) {
     signals.emplace_back();
-    create_signal(n_samples, freqs[i], 1, 0, signals[i]);
+    create_signal(n_samples, sds[i], signals[i]);
   }
   merge_signals(n_samples, signals, signal);
 
@@ -70,8 +70,8 @@ void run_test_instance_fft(std::ostream &log, std::vector<int> freqs, int n_samp
   fft(signal, freq_domain, n_samples, op);
 
   log << n_samples << " " << op << "\n";
-  for (int f : freqs)
-    log << f << " ";
+  for (auto sd : sds)
+    log << sd.f << " " << sd.a << " " << sd.b << " ";
   log << "\n";
   for (int i = 0; i < n_samples; ++i)
     log << "(" << std::fixed << std::setprecision(3) << freq_domain[i].real() << " " << freq_domain[i].imag() << ") ";
@@ -79,15 +79,16 @@ void run_test_instance_fft(std::ostream &log, std::vector<int> freqs, int n_samp
 }
 
 void run_test_case_fft(std::istream &test_case, std::ostream &log) {
-  int n_samples, n_freqs, f;
-  std::vector<int> freqs;
+  int n_samples, n_freqs;
+  SignalDesc sd;
+  std::vector<SignalDesc> sds;
   while (test_case >> n_samples >> n_freqs) {
-    freqs.clear();
+    sds.clear();
     for (int i = 0; i < n_freqs; ++i) {
-      test_case >> f;
-      freqs.push_back(f);
+      test_case >> sd.f >> sd.a >> sd.b;
+      sds.push_back(sd);
     }
-    run_test_instance_fft(log, freqs, n_samples);
+    run_test_instance_fft(log, sds, n_samples);
   }
 }
 
