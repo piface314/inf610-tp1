@@ -27,7 +27,7 @@ def time_plot(instances):
     r_x = np.linspace(min(x), max(x), 1000)
     r_y = n2logn(r_x)
     r_y2 = n2logn(r_x)/2
-    fig = plt.figure(figsize=(10,4), dpi=300)
+    fig = plt.figure(figsize=(10,6), dpi=300)
     ax = fig.add_subplot(111)
     plt.tight_layout()
     lines = [plt.plot(x, y, "bo-")[0], plt.plot(r_x, r_y, "r-")[0], plt.plot(r_x, r_y2, "g-")[0]]
@@ -35,7 +35,7 @@ def time_plot(instances):
         ax.text(xi-10, yi+100, f"$T({xi}) = {yi}$", ha="right")
     plt.xlabel("Tamanho da entrada, $n$")
     plt.ylabel("Qt. de operações, $T(n)$")
-    plt.legend(lines, ["$T(n)$ medido", "$\Theta(n\\log(n))$", "$T(n) = (n/2)\\log(n)$"])
+    plt.legend(lines, ["$T(n)$ medido", "$n\\log(n)$", "$T(n) = (n/2)\\log(n)$"])
     plt.grid(alpha=0.3)
     plt.savefig(os.path.join(argv[2], "fft-time.png"), bbox_inches='tight', pad_inches = 0.1)
     plt.close()
